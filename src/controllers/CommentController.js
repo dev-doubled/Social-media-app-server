@@ -12,6 +12,18 @@ class CommentController {
     }
   }
 
+  // [GET] /api/v1/comment/get-all-by-postId/:postId
+  async getAllByPostId(req, res, next) {
+    try {
+      const { postId } = req.params;
+      const comments = await CommentService.getAllByPostId(postId);
+      res.status(200).json(comments);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+      next();
+    }
+  }
+
   // [POST] /api/v1/comment/create
   async create(req, res, next) {
     try {

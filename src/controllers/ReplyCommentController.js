@@ -1,4 +1,4 @@
-import ReplyCommentService from "../services/ReplyCommentService.js"
+import ReplyCommentService from "../services/ReplyCommentService.js";
 
 class ReplyCommentController {
   // [GET] /api/v1/replyComment
@@ -12,11 +12,13 @@ class ReplyCommentController {
     }
   }
 
-  // [GET] /api/v1/replyComment/id
-  async getById(req, res, next) {
-    const replyCommentId = req.params.id;
+  // [GET] /api/v1/replyComment/get-all-reply/:commentId
+  async getAllReplyByCommentId(req, res, next) {
+    const { commentId } = req.params;
     try {
-      const replyComment = await ReplyCommentService.getReplyCommentById(replyCommentId);
+      const replyComment = await ReplyCommentService.getReplyCommentByCommentId(
+        commentId
+      );
       if (!replyComment) {
         res.status(404).json({ message: "Reply comment not found" });
       } else {
@@ -31,7 +33,9 @@ class ReplyCommentController {
   // [POST] /api/v1/replyComment/create
   async create(req, res, next) {
     try {
-      const replyComments = await ReplyCommentService.createReplyComment(req.body);
+      const replyComments = await ReplyCommentService.createReplyComment(
+        req.body
+      );
       res.status(200).json(replyComments);
     } catch (error) {
       console.error("Error creating reply comment:", error);

@@ -18,6 +18,10 @@ const schema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    photos: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Photo",
+    },
     email: {
       type: String,
       default: "",

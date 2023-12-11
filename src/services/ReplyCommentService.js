@@ -1,5 +1,5 @@
-import { Comments } from "../models/Comments.js";
-import { ReplyComments } from "../models/ReplyComments.js";
+import { Comments } from "../models/Post/Comments.js";
+import { ReplyComments } from "../models/Post/ReplyComments.js";
 
 class ReplyCommentService {
   async getAllReplyComments() {
@@ -11,10 +11,18 @@ class ReplyCommentService {
     }
   }
 
-  async getReplyCommentById(replyCommentId) {
+  async getReplyCommentByCommentId(commentId) {
     try {
-      const replyComment = await ReplyComments.findById(replyCommentId);
-      return replyComment;
+      const comments = await ReplyComments.findOne({
+        commentID: commentId,
+      });
+      if (!comments) {
+        return [];
+      }
+      const sortedReplyComments = comments.replyComments.sort(
+        (a, b) => b.createdAt - a.createdAt
+      );
+      return sortedReplyComments;
     } catch (error) {
       throw error;
     }

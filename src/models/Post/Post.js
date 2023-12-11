@@ -2,8 +2,16 @@ import mongoose from "mongoose";
 
 const schema = new mongoose.Schema(
   {
+    type: {
+      type: String,
+      required: true,
+    },
     author: {
-      //userID
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: null,
+      },
       userName: {
         type: String,
         required: true,
@@ -19,15 +27,10 @@ const schema = new mongoose.Schema(
     image: {
       type: String,
     },
-    interact: {
-      reaction: {
-        type: String,
-        default: null,
-      },
-      count: {
-        type: Number,
-        default: 0,
-      },
+    reactions: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Reactions",
+      default: null,
     },
     comments: {
       type: mongoose.Schema.Types.ObjectId,

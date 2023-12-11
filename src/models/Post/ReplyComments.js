@@ -1,14 +1,19 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  postID: {
+  commentID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Post",
+    ref: "Comments.comments",
     required: true,
   },
-  comments: [
+  replyComments: [
     {
       author: {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          default: null,
+        },
         userName: {
           type: String,
           required: true,
@@ -17,7 +22,7 @@ const schema = new mongoose.Schema({
           type: String,
         },
       },
-      commentContent: {
+      replyContent: {
         type: String,
         required: true,
       },
@@ -25,13 +30,8 @@ const schema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
-      replies: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ReplyComments",
-        default: null,
-      },
     },
   ],
 });
 
-export const Comments = mongoose.model("Comments", schema);
+export const ReplyComments = mongoose.model("ReplyComments", schema);

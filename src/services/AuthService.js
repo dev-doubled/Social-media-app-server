@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import util from "util";
 import EmailService from "./EmailService.js";
-import { User } from "../models/User.js";
+import { User } from "../models/User/User.js";
 import { generateVerificationCode } from "../utils/GenerateVerificationCode.js";
 
 class AuthService {
@@ -137,6 +137,8 @@ class AuthService {
       newUser.verificationCode.code = verificationCode;
       newUser.verificationCode.expireIn = Date.now() + 15 * 60 * 1000;
 
+      newUser.userAvatar =
+        "https://firebasestorage.googleapis.com/v0/b/social-media-app-44a6c.appspot.com/o/user-default.png?alt=media&token=cb979468-87df-4233-9def-57459113250e";
       await newUser.save();
 
       return newUser;

@@ -1,11 +1,27 @@
-import { Post } from "../models/Post.js";
-import { Comments } from "../models/Comments.js";
+import { Post } from "../models/Post/Post.js";
+import { Comments } from "../models/Post/Comments.js";
 
 class CommentService {
   async getAllComments() {
     try {
       const comments = await Comments.find({});
       return comments;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllByPostId(postId) {
+    try {
+      const post = await Comments.findOne({ postID: postId });
+      if (!post) {
+        return [];
+      }
+      const sortedComments = post.comments.sort(
+        (a, b) => b.createdAt - a.createdAt
+      );
+
+      return sortedComments;
     } catch (error) {
       throw error;
     }
@@ -29,10 +45,11 @@ class CommentService {
           ],
         });
         const post = await Post.findById(postID);
-        if (post) {
-          post.comments = existingComments._id;
-          await post.save();
+        if (!post) {
+          throw new Error("Post not found when updating comments.");
         }
+        post.comments = existingComments._id;
+        await post.save();
       } else {
         const newComment = {
           author: commentFields.author,

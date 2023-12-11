@@ -1,5 +1,6 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
+import { Post } from "../models/Post/Post.js"
 import { User } from "../models/User/User.js";
 import { Comments } from "../models/Post/Comments.js";
 import { ReplyComments } from "../models/Post/ReplyComments.js";
@@ -135,6 +136,14 @@ class UserService {
         await ReplyComments.updateMany(
           { "replyComments.author.userId": userId },
           { $set: { "replyComments.$[].author.userAvatar": userAvatar } }
+        );
+      }
+
+      // Update user avatar in post if it has changed
+      if (oldAvatar !== userAvatar) {
+        await Post.updateMany(
+          { "author.userId": userId },
+          { $set: { "author.userAvatar": userAvatar } }
         );
       }
 
